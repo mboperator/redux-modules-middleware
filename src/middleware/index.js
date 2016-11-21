@@ -1,5 +1,7 @@
 import { v4 } from 'uuid';
 
+export propCheck from './propCheck';
+
 export const decoratePayload = func => ({ payload, ...action }) =>
   ({ payload: func(payload), ...action });
 
@@ -27,3 +29,6 @@ export const addUUID = (key = 'uuid') => action => ({
   [key]: v4(),
   ...action,
 });
+
+export const swapTypes = typesToSwap => ({ type, ...action }) =>
+  ({ type: typesToSwap[type] || type, ...action });
