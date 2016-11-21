@@ -1,9 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
-
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+export propCheck from './propCheck';
+export decoratePayload from './decoratePayload';
+export decorateMeta from './decorateMeta';
+export parsePayloadErrors from './parsePayloadErrors';
+export log from './log';
+export swapTypes from './swapTypes';
