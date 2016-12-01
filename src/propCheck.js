@@ -1,40 +1,35 @@
-const defaultOnError = (err) => {
-  // eslint-disable-next-line no-console
-  console.error(
-    'Warning: Failed payloadType:',
-    err,
-  );
-};
+const defaultFormatter = (type, err) =>
+  `Warning: '${type}' failed payload typecheck: ${err}`;
+
 
 function propCheck(payloadTypes, params = {}) {
-  return ({ payload, meta, type, ...rest }) => {
-    const { onError = defaultOnError } = params;
+  return ({ payload, type, ...action }) => {
+    const {
+      logFunction = console.warn,
+      formatter = defaultFormatter,
+    } = params;
 
     if (process.env.NODE_ENV === 'production') {
       return {
         payload,
-        meta,
         type,
-        ...rest,
+        ...action,
       };
     }
 
     if (!payloadTypes) {
       return {
         payload,
-        meta,
         type,
-        ...rest,
+        ...action,
       };
     }
 
     if (typeof payloadTypes === 'function') { // If payloadTypes is a propcheck function
-      const result = payloadTypes({
-        payload,
-      }, 'payload', type, 'key') || {};
+      const result = payloadTypes({ payload }, 'payload', type, 'prop') || {};
       const { message } = result;
       if (message) {
-        onError(message);
+        logFunction(formatter(type, message));
       }
     } else { // If payloadTypes is an object (old API)
       const keys = Object.keys(payloadTypes);
@@ -44,7 +39,7 @@ function propCheck(payloadTypes, params = {}) {
         if (typeof propChecker !== 'undefined') {
           const { message } = propChecker(payload, key, type, 'prop') || {};
           if (message) {
-            onError(message);
+            logFunction(formatter(type, message));
           }
         }
       }
@@ -52,9 +47,8 @@ function propCheck(payloadTypes, params = {}) {
 
     return {
       payload,
-      meta,
       type,
-      ...rest,
+      ...action,
     };
   };
 }

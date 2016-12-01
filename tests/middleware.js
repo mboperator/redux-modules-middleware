@@ -1,8 +1,10 @@
+import { PropTypes } from 'react';
 import {
   decorateMeta,
   decoratePayload,
   swapTypes,
   log,
+  propCheck,
 } from '../src';
 import { it, describe } from 'mocha';
 import { expect } from 'chai';
@@ -89,3 +91,21 @@ describe('log', () => {
     expect(loggedMessage).to.equal(JSON.stringify(action));
   });
 })
+
+describe('propCheck', () => {
+  it('should not modify the action', () => {
+    const action = { type: 'foo', payload: 'bar' };
+    const propChecker = propCheck(PropTypes.string);
+    expect(propChecker(action)).to.deep.equal(action);
+  });
+  it('should throw prop errors for mismatched payload types', () => {
+    const action = { type: 'foo', payload: 0 };
+    let errorMessage = '';
+
+    const logFunction = message => { errorMessage = message; };
+    const propChecker = propCheck(PropTypes.string, { logFunction });
+    propChecker(action);
+
+    expect(errorMessage).to.deep.equal('Warning: \'foo\' failed payload typecheck: Invalid prop `payload` of type `number` supplied to `foo`, expected `string`.');
+  });
+});

@@ -53,6 +53,7 @@
     "mocha": "^2.4.5",
     "mocha-sinon": "^1.1.5",
     "prop-types": "^0.2.0",
+    "react": "^15.4.1",
     "sinon": "^1.17.4",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
