@@ -1,6 +1,6 @@
 {
   "name": "redux-modules-middleware",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A collection of common redux-module action middleware.",
   "main": "lib/index.js",
   "scripts": {
