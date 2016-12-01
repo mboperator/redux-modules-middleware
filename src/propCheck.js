@@ -6,7 +6,7 @@ const defaultOnError = (err) => {
   );
 };
 
-export default function propCheck(payloadTypes, params = {}) {
+function propCheck(payloadTypes, params = {}) {
   return ({ payload, meta, type, ...rest }) => {
     const { onError = defaultOnError } = params;
 
@@ -58,3 +58,5 @@ export default function propCheck(payloadTypes, params = {}) {
     };
   };
 }
+
+export default propCheck;
