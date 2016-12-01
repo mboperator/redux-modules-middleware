@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export propCheck from './propCheck';
 
 export const decorateMeta = func => ({ meta, ...action }) =>
