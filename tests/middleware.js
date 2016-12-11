@@ -84,13 +84,13 @@ describe('log', () => {
     const action = { type: 'foo' };
     let loggedMessage = '';
 
-    const formatter = JSON.stringify;
+    const formatter = action => [JSON.stringify(action)];
     const logFunction = message => { loggedMessage = message; };
     log({ logFunction, formatter })(action);
 
     expect(loggedMessage).to.equal(JSON.stringify(action));
   });
-})
+});
 
 describe('propCheck', () => {
   it('should not modify the action', () => {
