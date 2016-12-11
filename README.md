@@ -41,11 +41,16 @@ Runs action through `formatter` function, then calls the `logFunction`.
 ```js
     foo: {
       middleware: [
-        log({ formatter: action => `thar be an action yonder ${action}` }),
+        log({
+          formatter: action => [
+          'thar be an action yonder',
+          action
+        ]}),
       ],
     },
     // logs `thar be an action yonder { type: foo }`
 ```
+`formatter` should return an array of arguments to be applied to the `logFunction`.
 
 ### `swapTypes` object -> action -> decoratedAction
 Takes an object where keys are the types to swap, and values are the types to swap them with.

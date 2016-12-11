@@ -90,7 +90,7 @@ describe('log', () => {
 
     expect(loggedMessage).to.equal(JSON.stringify(action));
   });
-})
+});
 
 describe('propCheck', () => {
   it('should not modify the action', () => {
