@@ -9,7 +9,7 @@
 ## Documentation
 
 ### `decorateMeta` func -> action -> decoratedAction
-Decorates the action's `meta` key with the given function.
+Decorates the action's `meta` key with the provided function.
 ```js
     foo: {
       middleware: [
