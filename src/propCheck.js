@@ -1,3 +1,5 @@
+import Proptypes from 'prop-types';
+
 const defaultFormatter = (type, err) =>
   `Warning: '${type}' failed payload typecheck: ${err}`;
 
@@ -25,7 +27,10 @@ function propCheck(payloadTypes, params = {}) {
       };
     }
 
-    if (typeof payloadTypes === 'function') { // If payloadTypes is a propcheck function
+
+    if (typeof Proptypes.checkPropTypes === 'function') {  // new api
+      Proptypes.checkPropTypes(payloadTypes, payload, 'prop', type)
+    } else if (typeof payloadTypes === 'function') { // If payloadTypes is a propcheck function
       const result = payloadTypes({ payload }, 'payload', type, 'prop') || {};
       const { message } = result;
       if (message) {
