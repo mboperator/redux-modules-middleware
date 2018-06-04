@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import {
   decorateMeta,
   decoratePayload,
@@ -8,6 +8,7 @@ import {
 } from '../src';
 import { it, describe } from 'mocha';
 import { expect } from 'chai';
+import sinon from 'sinon'
 
 describe('decorateMeta', () => {
   it('should modify action\'s meta property', () => {
@@ -93,19 +94,29 @@ describe('log', () => {
 });
 
 describe('propCheck', () => {
+  beforeEach(() => {
+    sinon.stub(console, 'error');
+  });
+  
+  afterEach(() => {
+    console.error.restore();
+  });
+
   it('should not modify the action', () => {
     const action = { type: 'foo', payload: 'bar' };
     const propChecker = propCheck(PropTypes.string);
     expect(propChecker(action)).to.deep.equal(action);
   });
-  it('should throw prop errors for mismatched payload types', () => {
-    const action = { type: 'foo', payload: 0 };
-    let errorMessage = '';
-
-    const logFunction = message => { errorMessage = message; };
-    const propChecker = propCheck(PropTypes.string, { logFunction });
+  it('should trigger console.error for mismatched payload types', () => {
+    const action = { type: 'foo', payload: { test: 0 } };
+    const propChecker = propCheck({ test: PropTypes.string });
     propChecker(action);
-
-    expect(errorMessage).to.deep.equal('Warning: \'foo\' failed payload typecheck: Invalid prop `payload` of type `number` supplied to `foo`, expected `string`.');
+    sinon.assert.callCount(console.error, 1);
+  });
+  it('should not trigger console.error for matched payload types', () => {
+    const action = { type: 'foo', payload: { test: 'dfg' } };
+    const propChecker = propCheck({ test: PropTypes.string });
+    propChecker(action);
+    sinon.assert.notCalled(console.error);
   });
 });
